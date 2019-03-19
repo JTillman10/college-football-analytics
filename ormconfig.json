@@ -1,0 +1,10 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "me",
+  "password": "password",
+  "database": "college-football-analytics",
+  "entities": ["src/**/*.entity{.ts,.js}"],
+  "synchronize": false
+}
