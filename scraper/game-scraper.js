@@ -1,12 +1,14 @@
 const $ = require('cheerio');
+const axios = require('axios');
 
 const scrapeGames = (html, team) => {
   const games = [];
 
   $('table', html).each((tableIndex, table) => {
     if (tableIndex >= 1) {
+      let year;
       $('tr', table).each((rowIndex, row) => {
-        let year, conference;
+        let conference;
         if (rowIndex === 0) {
           year = $('a', row)
             .text()
@@ -17,7 +19,7 @@ const scrapeGames = (html, team) => {
             .split('(')[1]
             .split(')')[0];
 
-          // call service for conference
+          // call service for conference-team relationship
         } else {
           const columns = $('td', row);
           const date = $(columns[0]).text();
@@ -30,31 +32,45 @@ const scrapeGames = (html, team) => {
                   .text()
                   .split('@ ')[1]
               : null;
-            const home = nuetralLocation || $(columns[1]) === 'vs.';
-            const opponent = $(columns[2])
-              .find('a')
-              .text()
-              .replace('*', '');
+            const home = nuetralLocation || $(columns[1]).text() === 'vs.';
+            const nonFBS = $(columns[2]).find('a').length > 0 ? false : true;
+            const opponent = nonFBS
+              ? $(columns[2])
+                  .text()
+                  .split(' (')[0]
+              : $(columns[2])
+                  .find('a')
+                  .text()
+                  .replace('*', '');
             const conferenceGame =
               $(columns[2])
-                .find('a')
                 .text()
                 .charAt(0) === '*';
+
             const teamScore = $(columns[4]).text();
             const opponentScore = $(columns[5]).text();
 
-            // TODO add type for non I-A games
+            let type;
+            if (nonFBS) {
+              type = 'Non FBS';
+            }
+
+            if (columns[7]) {
+              type = $(columns[7]).text();
+            }
+
+            if (!type && nuetralLocation) {
+              type = 'Nuetral Site';
+            }
 
             games.push({
               homeTeamName: home ? team : opponent,
               homeTeamScore: home ? teamScore : opponentScore,
               awayTeamName: home ? opponent : team,
               awayTeamScore: home ? opponentScore : teamScore,
-              year: month === 1 ? year + 1 : year,
-              month,
-              day,
+              date: `${month}/${day}/${month === 1 ? year + 1 : year}`,
               conferenceGame,
-              type: $(columns[7]) ? $(columns[7]).text() : null,
+              type,
               location: nuetralLocation ? nuetralLocation : null,
             });
           }
@@ -64,6 +80,10 @@ const scrapeGames = (html, team) => {
   });
 
   console.log(games.length);
+  axios
+    .post('http://localhost:3000/games', games)
+    .then(response => console.log(response.length))
+    .catch(err => console.log('Request failed with error', err));
 };
 
 module.exports = {

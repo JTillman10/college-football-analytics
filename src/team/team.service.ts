@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Team } from './team.entity';
-import { Repository } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 
 import { Game } from '../game/game.entity';
+import { DateFilterCriteria } from './models/date-filter-criteria';
 
 @Injectable()
 export class TeamService {
@@ -33,11 +34,16 @@ export class TeamService {
 
   async getGamesByDateForTeamById(
     teamId: number,
-    filterCritera,
+    dateFilterCriteria: DateFilterCriteria,
   ): Promise<Game[]> {
+    const { start, end } = dateFilterCriteria;
     const team = await this.getTeamById(teamId);
     return await this.gameRepository.find({
-      where: [{ homeTeam: team }, { awayTeam: team }],
+      relations: ['homeTeam', 'awayTeam'],
+      where: [
+        { homeTeam: team, date: Between(start, end) },
+        { awayTeam: team, date: Between(start, end) },
+      ],
     });
   }
 
