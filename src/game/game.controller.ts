@@ -14,6 +14,6 @@ export class GameController {
 
   @Post()
   async saveGame(@Body(new ValidationPipe()) newGames: NewGame[]) {
-    return await this.gameService.create(newGames);
+    return await this.gameService.createGames(newGames);
   }
 }

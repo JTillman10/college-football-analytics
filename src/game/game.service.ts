@@ -16,7 +16,7 @@ export class GameService {
     return await this.gameRepository.find();
   }
 
-  async create(newGames: NewGame[]): Promise<Game[]> {
+  async createGames(newGames: NewGame[]): Promise<Game[]> {
     return newGames.reduce(async (previousPromise, nextGame): Promise<any> => {
       await previousPromise;
       return this.createGame(nextGame);
@@ -24,6 +24,7 @@ export class GameService {
   }
 
   async createGame(newGame: NewGame): Promise<Game> {
+    // TODO heck if game exists
     const game = new Game();
 
     let homeTeam = await this.teamService.getTeamByName(newGame.homeTeamName);

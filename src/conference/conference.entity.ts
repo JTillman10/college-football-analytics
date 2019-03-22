@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { ConferenceTeamRelationship } from 'src/conference-team-relationship/conference-team-relationship.entity';
+import { ConferenceTeamDuration } from 'src/conference-team-duration/conference-team-duration.entity';
 
 @Entity('conference')
 export class Conference {
@@ -8,8 +8,8 @@ export class Conference {
   @Column() name: string;
 
   @OneToMany(
-    type => ConferenceTeamRelationship,
-    conferenceTeamRelationship => conferenceTeamRelationship.conference,
+    type => ConferenceTeamDuration,
+    conferenceTeamDuration => conferenceTeamDuration.conference,
   )
-  conferenceTeamRelationships: ConferenceTeamRelationship;
+  conferenceTeamDurations: ConferenceTeamDuration;
 }

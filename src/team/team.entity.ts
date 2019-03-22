@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Game } from '../game/game.entity';
-import { ConferenceTeamRelationship } from '../conference-team-relationship/conference-team-relationship.entity';
+import { ConferenceTeamDuration } from '../conference-team-duration/conference-team-duration.entity';
 
 @Entity('team')
 export class Team {
@@ -13,8 +13,8 @@ export class Team {
   @OneToMany(type => Game, game => game.homeTeam) homeTeams: Team[];
   @OneToMany(type => Game, game => game.homeTeam) awayTeams: Team[];
   @OneToMany(
-    type => ConferenceTeamRelationship,
-    conferenceTeamRelationship => conferenceTeamRelationship.team,
+    type => ConferenceTeamDuration,
+    conferenceTeamDuration => conferenceTeamDuration.team,
   )
-  conferenceTeamRelationships: ConferenceTeamRelationship;
+  conferenceTeamDurations: ConferenceTeamDuration;
 }
