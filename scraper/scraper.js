@@ -1,20 +1,35 @@
 const puppeteer = require('puppeteer');
 
-const { scrapeGames } = require('./game-scraper');
-// get all links
+const { scrapeGames, scrapeTeams } = require('./game-scraper');
+
+const baseUrl = 'http://www.jhowell.net/cf/scores/';
+const mainPageUrl = 'http://www.jhowell.net/cf/scores/byName.htm';
 
 (async () => {
   const browser = await puppeteer.launch();
-  // loop through all links
-  const url = 'http://www.jhowell.net/cf/scores/Alabama.htm';
-
-  // if name doesn't exist, add to Team
 
   const page = await browser.newPage();
-  await page.goto(url);
-  const html = await page.content();
+  await page.goto(mainPageUrl);
+  const mainHtml = await page.content();
 
-  scrapeGames(html, 'Alabama');
+  // const teams = scrapeTeams(mainHtml);
+  const teams = [
+    {
+      team: 'Ohio State',
+      href: 'OhioState.htm',
+    },
+    {
+      team: 'Michigan',
+      href: 'Michigan.htm',
+    },
+  ];
+
+  for (let i = 0; i < teams.length; i++) {
+    const nextTeam = teams[i];
+    await page.goto(`${baseUrl}${nextTeam.href}`);
+    const teamHtml = await page.content();
+    await scrapeGames(teamHtml, nextTeam.team);
+  }
 
   await browser.close();
 })();
