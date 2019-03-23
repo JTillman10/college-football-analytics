@@ -12,17 +12,7 @@ const mainPageUrl = 'http://www.jhowell.net/cf/scores/byName.htm';
   await page.goto(mainPageUrl);
   const mainHtml = await page.content();
 
-  // const teams = scrapeTeams(mainHtml);
-  const teams = [
-    {
-      team: 'Ohio State',
-      href: 'OhioState.htm',
-    },
-    {
-      team: 'Michigan',
-      href: 'Michigan.htm',
-    },
-  ];
+  const teams = scrapeTeams(mainHtml);
 
   for (let i = 0; i < teams.length; i++) {
     const nextTeam = teams[i];
