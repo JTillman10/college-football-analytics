@@ -68,7 +68,7 @@ const scrapeGames = async (html, team) => {
               type = 'Nuetral Site';
             }
 
-            const newGame = {
+            games.push({
               homeTeamName: home ? team : opponent,
               homeTeamScore: home ? teamScore : opponentScore,
               awayTeamName: home ? opponent : team,
@@ -77,26 +77,7 @@ const scrapeGames = async (html, team) => {
               conferenceGame,
               type,
               location: nuetralLocation ? nuetralLocation : null,
-            };
-
-            if (
-              month.toString() === '11' &&
-              day.toString() === '24' &&
-              year.toString() === '2018'
-            ) {
-              games.push(newGame);
-            }
-
-            // games.push({
-            //   homeTeamName: home ? team : opponent,
-            //   homeTeamScore: home ? teamScore : opponentScore,
-            //   awayTeamName: home ? opponent : team,
-            //   awayTeamScore: home ? opponentScore : teamScore,
-            //   date: `${month}/${day}/${month === 1 ? year + 1 : year}`,
-            //   conferenceGame,
-            //   type,
-            //   location: nuetralLocation ? nuetralLocation : null,
-            // });
+            });
           }
         }
       });
