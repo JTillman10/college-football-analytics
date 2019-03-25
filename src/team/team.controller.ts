@@ -20,6 +20,11 @@ export class TeamController {
   //   return await this.teamService.getAllGamesForTeamById(teamId);
   // }
 
+  @Post()
+  async createTeams(@Body() names: string[]): Promise<Team[]> {
+    return await this.teamService.createTeams(names);
+  }
+
   @Post(':teamId/games')
   async getGamesByDateForTeamById(
     @Param('teamId') teamId: number,

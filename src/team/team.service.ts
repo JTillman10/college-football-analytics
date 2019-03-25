@@ -47,9 +47,16 @@ export class TeamService {
     });
   }
 
-  async create(name: string): Promise<Team> {
+  async createTeam(name: string): Promise<Team> {
     const newTeam = new Team();
     newTeam.name = name;
     return await this.teamRepository.save(newTeam);
+  }
+
+  async createTeams(names: string[]): Promise<Team[]> {
+    return names.reduce(async (previousPromise, nextName): Promise<any> => {
+      await previousPromise;
+      return this.createTeam(nextName);
+    }, Promise.resolve());
   }
 }

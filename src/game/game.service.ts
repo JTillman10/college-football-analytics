@@ -24,8 +24,6 @@ export class GameService {
   }
 
   async createGame(newGame: NewGame): Promise<Game> {
-    // TODO heck if game exists
-
     let homeTeam = await this.teamService.getTeamByName(newGame.homeTeamName);
     let awayTeam = await this.teamService.getTeamByName(newGame.awayTeamName);
 
@@ -41,12 +39,12 @@ export class GameService {
 
     const game = new Game();
     if (!homeTeam) {
-      await this.teamService.create(newGame.homeTeamName);
+      await this.teamService.createTeam(newGame.homeTeamName);
       homeTeam = await this.teamService.getTeamByName(newGame.homeTeamName);
     }
 
     if (!awayTeam) {
-      await this.teamService.create(newGame.awayTeamName);
+      await this.teamService.createTeam(newGame.awayTeamName);
       awayTeam = await this.teamService.getTeamByName(newGame.awayTeamName);
     }
 

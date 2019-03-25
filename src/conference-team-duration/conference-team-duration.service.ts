@@ -56,7 +56,7 @@ export class ConferenceTeamDurationService {
     );
 
     if (!teamName) {
-      teamName = await this.teamService.create(
+      teamName = await this.teamService.createTeam(
         newConferenceTeamDuration.teamName,
       );
     }
