@@ -36,7 +36,7 @@ export class AppModule implements NestModule {
       .apply(ParseDateMiddleware)
       .forRoutes(
         { path: 'games', method: RequestMethod.POST },
-        { path: 'rankings', method: RequestMethod.POST },
+        { path: 'polls', method: RequestMethod.POST },
       );
   }
 }

@@ -7,7 +7,7 @@ export class Poll {
 
   @OneToMany(type => Ranking, ranking => ranking.id) rankings: Ranking[];
   @Column() type: string;
-  @Column() date: Date;
+  @Column({ nullable: true }) date: Date;
   @Column() week: number;
   @Column() year: number;
 }

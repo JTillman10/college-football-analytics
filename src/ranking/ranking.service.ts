@@ -17,8 +17,8 @@ export class RankingService {
     private readonly cfbAnalyticsLoggerService: CFBAnalyticsLoggerService,
   ) {}
 
-  async getAllGames() {
-    return await this.rankingRepository.find();
+  async getRanking(team, rank, poll) {
+    return await this.rankingRepository.find({ where: { team, rank, poll } });
   }
 
   async createRankings(
@@ -35,7 +35,7 @@ export class RankingService {
 
   async createRanking(newRanking: NewRanking, poll: Poll): Promise<Ranking> {
     const team = await this.teamService.getTeamByName(newRanking.teamName);
-    if (!team) {
+    if (!team && !['LSU', 'Brigham Young'].includes(newRanking.teamName)) {
       this.cfbAnalyticsLoggerService.error(
         'Could not find team: ',
         newRanking.teamName,
@@ -43,8 +43,11 @@ export class RankingService {
       return;
     }
 
+    if (team && poll.id) {
+      const savedRanking = await this.getRanking(team, newRanking.rank, poll);
+    }
+
     const ranking = new Ranking();
-    ranking.firstPlaceVotes = newRanking.firstPlaceVotes;
     ranking.rank = newRanking.rank;
     ranking.team = team;
     ranking.poll = poll;

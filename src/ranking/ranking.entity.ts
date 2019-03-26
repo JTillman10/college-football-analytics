@@ -8,6 +8,6 @@ export class Ranking {
 
   @ManyToOne(type => Team, team => team.id) team: Team;
   @ManyToOne(type => Poll, poll => poll.id) poll: Poll;
-  @Column({ nullable: true }) firstPlaceVotes: number;
+  // @Column({ nullable: true }) firstPlaceVotes: number;
   @Column() rank: number;
 }

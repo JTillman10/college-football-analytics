@@ -13,7 +13,7 @@ export class PollService {
     private readonly rankingService: RankingService,
   ) {}
 
-  async getPollByDate(week, date, type): Promise<Poll> {
+  async getPollByDate(week, date, type, year): Promise<Poll> {
     return await this.pollRepository.findOne({ where: { week, date, type } });
   }
 
@@ -29,19 +29,27 @@ export class PollService {
       newPoll.week,
       newPoll.date,
       newPoll.type,
+      newPoll.year,
     );
-    if (poll) {
-      return;
+
+    if (!poll) {
+      poll = new Poll();
+
+      poll.date = newPoll.date;
+      poll.type = newPoll.type;
+      poll.week = newPoll.week;
+      poll.year = newPoll.year;
+
+      poll = await this.pollRepository.save(poll);
     }
 
-    poll = new Poll();
+    await this.rankingService.createRankings(newPoll.rankings, poll);
 
-    poll.date = newPoll.date;
-    poll.type = newPoll.type;
-    poll.week = newPoll.week;
-
-    const savedPoll = await this.pollRepository.save(poll);
-
-    await this.rankingService.createRankings(newPoll.rankings, savedPoll);
+    return await this.getPollByDate(
+      newPoll.week,
+      newPoll.date,
+      newPoll.type,
+      newPoll.year,
+    );
   }
 }
