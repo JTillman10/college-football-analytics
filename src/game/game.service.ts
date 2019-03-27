@@ -30,7 +30,10 @@ export class GameService {
     if (homeTeam && awayTeam) {
       if (
         await this.gameRepository.findOne({
-          where: { homeTeam, awayTeam, date: newGame.date },
+          where: [
+            { homeTeam, awayTeam, date: newGame.date },
+            { awayTeam: homeTeam, homeTeam: awayTeam, date: newGame.date },
+          ],
         })
       ) {
         return;

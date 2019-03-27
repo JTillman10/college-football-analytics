@@ -1,7 +1,52 @@
 const $ = require('cheerio');
 const axios = require('axios');
 
+const correctTeam = team => {
+  if (team[0] === '+') {
+    team = team.substring(1);
+  }
+
+  team = team.trim();
+
+  if (team === 'Miami (Florida)') {
+    return 'Miami (FL)';
+  } else if (team === 'Miami (Ohio)') {
+    return 'Miami (OH)';
+  } else if (team === 'BYU') {
+    return 'Brigham Young';
+  } else if (team === 'Southern California') {
+    return 'USC';
+  } else if (team === 'Mississippi') {
+    return 'Mississippi';
+  } else if (team === 'Southern Methodist') {
+    return 'SMU';
+  } else if (team === 'UCF') {
+    return 'Central Florida';
+  } else if (team === 'UTEP') {
+    return 'Texas-El Paso';
+  } else if (team === 'Carnegie Tech') {
+    return 'Carnegie Mellon';
+  } else if (team === `St. Mary's`) {
+    return `Saint Mary's (CA)`;
+  } else if (team === `St. Mary's Pre-Flight`) {
+    return `Saint Mary's (CA) Pre-Flight`;
+  } else if (team === 'Norman NAS') {
+    return 'Norman Naval Air Station';
+    // } else if (team === 'Southwestern (Texas)') {
+    //   return 'Southwestern (TX)';
+  } else if (team === 'Catawba') {
+    return 'Catawba College';
+    // } else if (team === 'Second Air Force') {
+    //   return 'Second Air Force (Colorado)';
+  } else if (team === 'Morris Field') {
+    return 'Third Air Force';
+  } else {
+    return team;
+  }
+};
+
 const scrapeGames = async (html, team) => {
+  team = correctTeam(team);
   const games = [],
     conferences = [];
 
@@ -37,12 +82,11 @@ const scrapeGames = async (html, team) => {
                   .text()
                   .split('@ ')[1]
               : null;
-            const home = nuetralLocation || $(columns[1]).text() === 'vs.';
             const nonFBS = $(columns[2]).find('a').length > 0 ? false : true;
-            const opponent = nonFBS
+            let opponent = nonFBS
               ? $(columns[2])
                   .text()
-                  .split(' (')[0]
+                  .split(' (non-IA)')[0]
               : $(columns[2])
                   .find('a')
                   .text()
@@ -51,6 +95,9 @@ const scrapeGames = async (html, team) => {
               $(columns[2])
                 .text()
                 .charAt(0) === '*';
+            const home = nuetralLocation
+              ? team < opponent
+              : $(columns[1]).text() === 'vs.';
 
             const teamScore = $(columns[4]).text();
             const opponentScore = $(columns[5]).text();
@@ -67,6 +114,16 @@ const scrapeGames = async (html, team) => {
             if (!type && nuetralLocation) {
               type = 'Nuetral Site';
             }
+
+            // if (opponent === 'Miami') {
+            //   opponent = 'Miami (OH)';
+            //   type = 'Non FBS';
+            // } else if (opponent === 'Southwestern') {
+            //   opponent = 'Southwestern (TX)';
+            //   type = 'Non FBS';
+            // }
+
+            opponent = correctTeam(opponent);
 
             games.push({
               homeTeamName: home ? team : opponent,
@@ -104,7 +161,7 @@ const scrapeGames = async (html, team) => {
     }
   });
 
-  console.log('Creating for ', team);
+  console.log('Creating for', team);
 
   await axios
     .post('http://localhost:3000/conferenceTeamDurations', conferenceChanges)

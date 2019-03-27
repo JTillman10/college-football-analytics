@@ -1,21 +1,25 @@
 const $ = require('cheerio');
 const axios = require('axios');
 
-const months = [
-  '',
-  'Jan',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  'Aug',
-  'Sept',
-  'Oct',
-  'Nov',
-  'Dec',
-];
+const correctTeam = team => {
+  if (team === 'Pitt') {
+    return 'Pittsburgh';
+  } else if (team === 'Ole Miss') {
+    return 'Mississippi';
+  } else if (team === 'UTEP') {
+    return 'Texas-El Paso';
+  } else if (team === 'UCF') {
+    return 'Central Florida';
+  } else if (team === 'Southwestern (TX)') {
+    return 'Southwestern (Texas)';
+  } else if (team === 'Louisiana State') {
+    return 'LSU';
+  } else if (team === 'Southern California') {
+    return 'USC';
+  } else {
+    return team;
+  }
+};
 
 const scrapePolls = async (html, year) => {
   console.log('Scraping ', year);
@@ -37,9 +41,6 @@ const scrapePolls = async (html, year) => {
           .first()
           .text(),
       );
-      if (week === 1) {
-        console.log();
-      }
 
       if (week !== currentWeek) {
         currentWeek = week;
@@ -68,9 +69,14 @@ const scrapePolls = async (html, year) => {
       }
 
       const rank = parseInt($($(row).find('td')[1]).text());
-      const teamName = $($(row).find('td')[2])
-        .find('a')
-        .text();
+      let teamName =
+        $($(row).find('td')[2]).find('a').length > 0
+          ? $($(row).find('td')[2])
+              .find('a')
+              .text()
+          : $($(row).find('td')[2]).text();
+
+      teamName = correctTeam(teamName);
 
       poll.rankings.unshift({
         rank,

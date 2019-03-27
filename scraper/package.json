@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:games": "node scraper.js --games",
+    "start:polls": "node scraper.js --polls"
   },
   "keywords": [],
   "author": "",

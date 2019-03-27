@@ -4,7 +4,16 @@ const argv = require('yargs').argv;
 const { scrapeGames, scrapeTeams } = require('./game-scraper');
 const { scrapePolls } = require('./polls-scraper');
 
+const getTime = () => {
+  const today = new Date();
+  const hours = today.getHours();
+  const minutes = today.getMinutes();
+  const seconds = today.getSeconds();
+  return `${hours}:${minutes}:${seconds}`;
+};
+
 const runGameScraper = async () => {
+  console.log(getTime());
   const baseUrl = 'http://www.jhowell.net/cf/scores/';
   const mainPageUrl = 'http://www.jhowell.net/cf/scores/byName.htm';
 
@@ -24,9 +33,11 @@ const runGameScraper = async () => {
   }
 
   await browser.close();
+  console.log(getTime());
 };
 
 const runPollsScraper = async () => {
+  console.log(getTime());
   const getUrl = year =>
     `https://www.sports-reference.com/cfb/years/${year}-polls.html`;
 
@@ -34,7 +45,7 @@ const runPollsScraper = async () => {
   const page = await browser.newPage();
 
   // const years = [...Array(1).keys()].map(i => i + 2006);
-  const years = [...Array(82).keys()].map(i => i + 1936);
+  const years = [...Array(83).keys()].map(i => i + 1936);
   for (let i = 0; i < years.length; i++) {
     const nextYear = years[i];
     await page.goto(getUrl(nextYear));
@@ -43,6 +54,7 @@ const runPollsScraper = async () => {
   }
 
   await browser.close();
+  console.log(getTime());
 };
 
 if (argv.games) {
