@@ -94,7 +94,7 @@ const scrapePolls = async (html, year) => {
   // console.log(polls);
 
   await axios
-    .post('http://localhost:3000/polls', polls)
+    .post('http://localhost:3000/api/polls', polls)
     .then(rankings => console.log(`Successfully created the rankings`))
     .catch(err => console.log('Rankings creation with error', err));
 };

@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConferenceTeamDuration } from './conference-team-duration.entity';
 import { Repository } from 'typeorm';
+
+import { ConferenceTeamDuration } from './conference-team-duration.entity';
+import { ConferenceService } from '../conference/conference.service';
 import { NewConferenceTeamDuration } from './models/new-conference-team-duration';
-import { ConferenceService } from 'src/conference/conference.service';
-import { TeamService } from 'src/team/team.service';
+import { TeamService } from '../team/team.service';
 
 @Injectable()
 export class ConferenceTeamDurationService {

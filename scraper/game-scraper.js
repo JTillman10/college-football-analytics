@@ -115,14 +115,6 @@ const scrapeGames = async (html, team) => {
               type = 'Nuetral Site';
             }
 
-            // if (opponent === 'Miami') {
-            //   opponent = 'Miami (OH)';
-            //   type = 'Non FBS';
-            // } else if (opponent === 'Southwestern') {
-            //   opponent = 'Southwestern (TX)';
-            //   type = 'Non FBS';
-            // }
-
             opponent = correctTeam(opponent);
 
             games.push({
@@ -164,14 +156,17 @@ const scrapeGames = async (html, team) => {
   console.log('Creating for', team);
 
   await axios
-    .post('http://localhost:3000/conferenceTeamDurations', conferenceChanges)
+    .post(
+      'http://localhost:3000/api/conferenceTeamDurations',
+      conferenceChanges,
+    )
     .then(response =>
       console.log(`Created ${conferenceChanges.length} conference durations`),
     )
     .catch(err => console.log('Conference request failed with error', err));
 
   await axios
-    .post('http://localhost:3000/games', games)
+    .post('http://localhost:3000/api/games', games)
     .then(response => console.log(`Created ${games.length} games`))
     .catch(err => console.log('Game request failed with error', err));
 
