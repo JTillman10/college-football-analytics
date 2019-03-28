@@ -1,9 +1,11 @@
 import { Controller, Post, Body, ValidationPipe, Get } from '@nestjs/common';
+
+import { apiPrefix } from '../config';
+
 import { GameService } from './game.service';
-import { Game } from './game.entity';
 import { NewGame } from './models/new-game.model';
 
-@Controller('games')
+@Controller(`${apiPrefix}/games`)
 export class GameController {
   constructor(private readonly gameService: GameService) {}
 

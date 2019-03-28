@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+
 import { Conference } from '../conference/conference.entity';
 import { Team } from '../team/team.entity';
 
