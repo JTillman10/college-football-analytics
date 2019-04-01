@@ -34,10 +34,11 @@ export class TeamService {
 
   async getGamesByDateForTeamById(
     teamId: number,
-    dateFilterCriteria: DateFilterCriteria,
+    start: string = '1/1/1800',
+    end: string = '12/31/3000',
   ): Promise<Game[]> {
-    const { start, end } = dateFilterCriteria;
     const team = await this.getTeamById(teamId);
+
     return await this.gameRepository.find({
       relations: ['homeTeam', 'awayTeam'],
       where: [
