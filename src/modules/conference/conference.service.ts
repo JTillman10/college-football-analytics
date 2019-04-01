@@ -12,10 +12,6 @@ export class ConferenceService {
     private readonly conferenceRepository: Repository<Conference>,
   ) {}
 
-  async getAllConference(): Promise<Conference[]> {
-    return await this.conferenceRepository.find();
-  }
-
   async getConferenceByName(name: string): Promise<Conference> {
     return await this.conferenceRepository.findOne({ where: { name } });
   }

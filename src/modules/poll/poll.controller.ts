@@ -1,6 +1,6 @@
 import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
 
-import { apiPrefix } from '../config';
+import { apiPrefix } from '../../config';
 
 import { PollService } from './poll.service';
 import { NewPoll } from './models/new-poll.model';

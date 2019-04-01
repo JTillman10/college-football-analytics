@@ -4,9 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Ranking } from './ranking.entity';
 import { Repository } from 'typeorm';
 import { NewRanking } from './models/new-ranking.model';
-import { TeamService } from 'src/team/team.service';
-import { Poll } from 'src/poll/poll.entity';
-import { CFBAnalyticsLoggerService } from 'src/logger/logger.service';
+import { TeamService } from '../team/team.service';
+import { Poll } from '../poll/poll.entity';
+import { CFBAnalyticsLoggerService } from '../../logger/logger.service';
 
 @Injectable()
 export class RankingService {

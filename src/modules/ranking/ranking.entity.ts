@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Team } from '../team/team.entity';
-import { Poll } from 'src/poll/poll.entity';
+import { Poll } from '../poll/poll.entity';
 
 @Entity('ranking')
 export class Ranking {

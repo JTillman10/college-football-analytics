@@ -4,7 +4,6 @@ import { Team } from './team.entity';
 import { Repository, Between } from 'typeorm';
 
 import { Game } from '../game/game.entity';
-import { DateFilterCriteria } from './models/date-filter-criteria';
 
 @Injectable()
 export class TeamService {
