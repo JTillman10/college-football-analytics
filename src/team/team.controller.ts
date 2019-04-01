@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Query } from '@nestjs/common';
 
 import { apiPrefix } from '../config';
 
@@ -21,14 +21,12 @@ export class TeamController {
     return await this.teamService.createTeams(names);
   }
 
-  @Post(':teamId/games')
+  @Get(':teamId/games')
   async getGamesByDateForTeamById(
     @Param('teamId') teamId: number,
-    @Body() dateFilterCriteria: DateFilterCriteria,
+    @Query('start') start: string,
+    @Query('end') end: string,
   ): Promise<Game[]> {
-    return await this.teamService.getGamesByDateForTeamById(
-      teamId,
-      dateFilterCriteria,
-    );
+    return await this.teamService.getGamesByDateForTeamById(teamId, start, end);
   }
 }
