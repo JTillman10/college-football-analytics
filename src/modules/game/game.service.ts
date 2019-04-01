@@ -13,8 +13,8 @@ export class GameService {
     @InjectRepository(Game) private readonly gameRepository: Repository<Game>,
   ) {}
 
-  async getAllGames() {
-    return await this.gameRepository.find();
+  async getGameById(gameId: number) {
+    return await this.gameRepository.findOne({ where: { id: gameId } });
   }
 
   async createGames(newGames: NewGame[]): Promise<Game[]> {

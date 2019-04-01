@@ -20,6 +20,11 @@ export class TeamController {
     return await this.teamService.createTeams(names);
   }
 
+  @Get()
+  async getTeamById(@Param('teamId') teamId: number): Promise<Team> {
+    return await this.teamService.getTeamById(teamId);
+  }
+
   @Get(':teamId/games')
   async getGamesByDateForTeamById(
     @Param('teamId') teamId: number,
